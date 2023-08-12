@@ -83,47 +83,4 @@ export async function handler(event, context) {
                     userId: userInfo.id
                 };
     
-                message.components = [{
-                    type: 1,
-                    components: [{
-                        type: 2,
-                        style: 5,
-                        label: "Approve appeal and unban user",
-                        url: `${unbanUrl.toString()}?token=${encodeURIComponent(createJwt(unbanInfo))}`
-                    }]
-                }];
-            }
-        }
-
-        const result = await fetch(`${API_ENDPOINT}/channels/${encodeURIComponent(process.env.APPEALS_CHANNEL)}/messages`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`
-            },
-            body: JSON.stringify(message)
-        });
-
-        if (result.ok) {
-            if (process.env.USE_NETLIFY_FORMS) {
-                return {
-                    statusCode: 200
-                };
-            } else {
-                return {
-                    statusCode: 303,
-                    headers: {
-                        "Location": "/success"
-                    }
-                };
-            }
-        } else {
-            console.log(JSON.stringify(await result.json()));
-            throw new Error("Failed to submit message");
-        }
-    }
-
-    return {
-        statusCode: 400
-    };
-}
+              
