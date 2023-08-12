@@ -76,16 +76,22 @@ export async function handler(event, context) {
             } catch (e) {
                 console.log(e);
             }
-
-
-
-
-
-
-
-
-            
-
+ if (!process.env.DISABLE_UNBAN_LINK) {
+                const unbanUrl = new URL("/.netlify/functions/unban", DEPLOY_PRIME_URL);
+                const unbanInfo = {
+                    userId: userInfo.id
+                };
+                  message.components = [{
+                    type: 1,
+                    components: [{
+                        type: 2,
+                        style: 5,
+                        label: "Approve appeal and unban user",
+                        url: `${unbanUrl.toString()}?token=${encodeURIComponent(createJwt(unbanInfo))}`
+                    }]
+                }];
+            }
+        }
         const result = await fetch(`${API_ENDPOINT}/channels/${encodeURIComponent(process.env.APPEALS_CHANNEL)}/messages`, {
             method: "POST",
             headers: {
